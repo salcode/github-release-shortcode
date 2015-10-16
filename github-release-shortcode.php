@@ -38,6 +38,9 @@ function fe_github_release_sc( $atts, $content='' ) {
     $content = esc_html( $content );
 
     if ( is_wp_error( $href ) ) {
+	if ( WP_DEBUG ) {
+	    error_log( 'Error in plugin GitHub Release Shortcode' . print_r( $href, true ) );
+	}
 	return "<strong class=\"github-release-error-message\">The link to the release on GitHub is currently unavailable</strong>";
     }
 
