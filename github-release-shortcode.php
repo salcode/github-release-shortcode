@@ -33,9 +33,7 @@ function fe_github_release_sc( $atts, $content='' ) {
 
     $output = '';
 
-    $href = esc_url( fe_github_release_get_href( $atts['repo'] , $atts['transient'], $atts['cache_length'] ) );
-    $class = esc_attr( $atts['class'] );
-    $content = esc_html( $content );
+    $href = fe_github_release_get_href( $atts['repo'] , $atts['transient'], $atts['cache_length'] );
 
     if ( is_wp_error( $href ) ) {
 	if ( WP_DEBUG ) {
@@ -43,6 +41,10 @@ function fe_github_release_sc( $atts, $content='' ) {
 	}
 	return "<strong class=\"github-release-error-message\">The link to the release on GitHub is currently unavailable</strong>";
     }
+
+    $href = esc_url( $href );
+    $class = esc_attr( $atts['class'] );
+    $content = esc_html( $content );
 
     $output .= "<a href=\"{$href}\" class=\"{$class}\">{$content}</a>";
 
