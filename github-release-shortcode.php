@@ -71,7 +71,10 @@ function fe_github_release_get_href( $repo, $use_transient, $cache_length ) {
 }
 
 function fe_github_release_remote_call( $repo ) {
-    // check $repo against [A-Za-z0-9_.-], which is the list github uses
+    // check $repo against [A-Za-z0-9_.-/], which is the list github uses
+    if( 1 !== preg_match( "/^[a-zA-Z0-9_\.\-\/]+$/", $repo, $matches ) ) {
+	return new WP_Error( 'malformed_github_repo', 'The GitHub repo requested has invalid characters' );
+    }
     $url = 'https://api.github.com/repos/' . $repo . '/releases/latest';
     $args = array();
 
