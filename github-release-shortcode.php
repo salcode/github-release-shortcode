@@ -42,5 +42,31 @@ function fe_github_release_sc( $atts, $content='' ) {
 
 function fe_github_release_get_href( $repo ) {
     // get from transient
+    // return fe_github_release_remote_call( $repo );
     return 'http://example.com';
+}
+
+function fe_github_release_remote_call( $repo ) {
+    // check $repo against [A-Za-z0-9_.-], which is the list github uses
+    $url = 'https://api.github.com/repos/' . $repo . '/releases/latest';
+    $args = array();
+
+    $response = wp_remote_get( $url, $args );
+
+    if ( ! $response ) {
+	return new WP_Error( 'github_no_response', 'GitHub returned no response when the latest release was requested' );
+    }
+
+    if ( is_wp_error( $reponse ) ) {
+	return $response;
+    }
+
+    $response_obj = json_decode( wp_remote_retrieve_body( $response ) );
+
+    if ( ! isset( $response_obj->zipball_url ) ) {
+	return new WP_Error( 'github_no_zipball_url', 'GitHub returned a response without a zipball_url defined' );
+    }
+
+    return $response_obj->zipball_url;
+
 }
