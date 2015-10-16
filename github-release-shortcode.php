@@ -41,9 +41,17 @@ function fe_github_release_sc( $atts, $content='' ) {
 }
 
 function fe_github_release_get_href( $repo ) {
-    // get from transient
-    // return fe_github_release_remote_call( $repo );
-    return 'http://example.com';
+
+    // santize the $repo (remove special chars, use dashes, etc.)
+    // take up to the last 35 chars of the santized $repo name
+    // prepend 'ghr_' to create the transient key
+    $key = 'ghr_' . substr( sanitize_title( $repo ), -35 );
+
+    if ( false === ( $href = get_transient( $key ) ) ) {
+	$href = fe_github_release_remote_call( $repo );
+	set_transient( $key, $href, 1 * DAY_IN_SECONDS );
+    }
+    return $href;
 }
 
 function fe_github_release_remote_call( $repo ) {
