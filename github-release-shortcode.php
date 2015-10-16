@@ -20,7 +20,7 @@ function fe_github_release_sc( $atts, $content='' ) {
     $atts = shortcode_atts(
 	array(
 	    'repo'  => 'salcode/github-release-shortcode',
-	    'class' => 'btn btn-primary',
+	    'class' => 'btn btn-primary github-release-shortcode-btn',
 	),
 	$atts,
 	'github_release'
@@ -32,7 +32,7 @@ function fe_github_release_sc( $atts, $content='' ) {
     $content = esc_html( $content );
 
     if ( is_wp_error( $href ) ) {
-	return "<strong>The link to the release on GitHub is currently unavailable</strong>";
+	return "<strong class=\"github-release-error-message\">The link to the release on GitHub is currently unavailable</strong>";
     }
 
     $output .= "<a href=\"{$href}\" class=\"{$class}\">{$content}</a>";
