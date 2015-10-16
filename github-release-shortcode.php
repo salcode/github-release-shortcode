@@ -76,7 +76,7 @@ function fe_github_release_remote_call( $repo ) {
 	return new WP_Error( 'github_no_response', 'GitHub returned no response when the latest release was requested' );
     }
 
-    if ( is_wp_error( $reponse ) ) {
+    if ( is_wp_error( $response ) ) {
 	return $response;
     }
 
