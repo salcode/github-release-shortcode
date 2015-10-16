@@ -20,7 +20,7 @@ function fe_github_release_sc( $atts, $content='' ) {
     $atts = shortcode_atts(
 	array(
 	    'repo'         => 'salcode/github-release-shortcode',
-	    'class'        => 'btn btn-primary github-release-shortcode-btn',
+	    'class'        => 'github-release-shortcode-btn',
 	    'transient'    => 'true', // use transient
 	    'cache_length' => 1 * DAY_IN_SECONDS,
 	),
