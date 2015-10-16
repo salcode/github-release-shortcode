@@ -53,7 +53,9 @@ function fe_github_release_get_href( $repo, $use_transient ) {
 	|| false === ( $href = get_transient( $key ) )
     ) {
 	$href = fe_github_release_remote_call( $repo );
-	set_transient( $key, $href, 1 * DAY_IN_SECONDS );
+	if ( ! is_wp_error( $href ) ) {
+	    set_transient( $key, $href, 1 * DAY_IN_SECONDS );
+	}
     }
     return $href;
 }
