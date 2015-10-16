@@ -19,15 +19,16 @@ add_shortcode( 'github_release', 'fe_github_release_sc' );
 function fe_github_release_sc( $atts, $content='' ) {
     $atts = shortcode_atts(
 	array(
-	    'repo'  => 'salcode/github-release-shortcode',
-	    'class' => 'btn btn-primary github-release-shortcode-btn',
+	    'repo'      => 'salcode/github-release-shortcode',
+	    'class'     => 'btn btn-primary github-release-shortcode-btn',
+	    'transient' => 'true', // use transient
 	),
 	$atts,
 	'github_release'
     );
     $output = '';
 
-    $href = esc_url( fe_github_release_get_href( $atts['repo'] ) );
+    $href = esc_url( fe_github_release_get_href( $atts['repo'] , $atts['transient'] ) );
     $class = esc_attr( $atts['class'] );
     $content = esc_html( $content );
 
@@ -40,14 +41,17 @@ function fe_github_release_sc( $atts, $content='' ) {
     return $output;
 }
 
-function fe_github_release_get_href( $repo ) {
+function fe_github_release_get_href( $repo, $use_transient ) {
 
     // santize the $repo (remove special chars, use dashes, etc.)
     // take up to the last 35 chars of the santized $repo name
     // prepend 'ghr_' to create the transient key
     $key = 'ghr_' . substr( sanitize_title( $repo ), -35 );
 
-    if ( false === ( $href = get_transient( $key ) ) ) {
+    if (
+	'true' !== $use_transient
+	|| false === ( $href = get_transient( $key ) )
+    ) {
 	$href = fe_github_release_remote_call( $repo );
 	set_transient( $key, $href, 1 * DAY_IN_SECONDS );
     }
